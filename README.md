@@ -104,7 +104,7 @@ You can get your API key from [The Movie Database (TMDB)](https://www.themoviedb
 ### 4. Run the application
 
 ```bash
-python project.py
+python cinematch.py
 ```
 
 ---
@@ -114,7 +114,7 @@ python project.py
 ```
 cinematch/
 │
-├── project.py          # Main application
+├── cinematch.py          # Main application
 ├── requirements.txt    # Python dependencies
 ├── .env.example        # Environment variable template
 ├── .gitignore          # Ignored files
