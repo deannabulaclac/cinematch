@@ -109,21 +109,6 @@ python cinematch.py
 
 ---
 
-## Project Structure
-
-```
-cinematch/
-│
-├── cinematch.py        # Main application
-├── requirements.txt    # Python dependencies
-├── .env.example        # Environment variable template
-├── .gitignore          # Ignored files
-├── LICENSE             # MIT License
-└── README.md           # Documentation
-```
-
----
-
 ## How It Works
 
 CineMatch communicates with the TMDB API to retrieve movie and TV show information.
