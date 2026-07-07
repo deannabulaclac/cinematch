@@ -12,7 +12,7 @@ The project focuses on practicing API integration, data processing, error handli
 
 ## Features
 
-### Find Similar Movies & TV Shows
+### 1. Find Similar Movies & TV Shows
 
 Search for a movie or TV show and get recommendations based on the selected title.
 
@@ -26,7 +26,7 @@ Users can:
 
 ---
 
-### Trending Today
+### 2. Trending Today
 
 View currently trending movies or TV shows from TMDB.
 
@@ -34,7 +34,7 @@ The application displays popular titles and allows users to view more informatio
 
 ---
 
-### Surprise Me
+### 3. Surprise Me
 
 Discover something new with random recommendations.
 
