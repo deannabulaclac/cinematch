@@ -96,6 +96,7 @@ def similar_titles():
         print("No recommendations found. Try another title.")
         return
     media_label = "MOVIES" if media == "movie" else "TV SHOWS"
+    clear_screen()
     print(f"\n===== SIMILAR {media_label} LIKE {title.upper()} ({get_release_date(selected)[:4]}) =====")
     for i, item in enumerate(results, 1):
         print(f"{i}. {get_title(item)} ({get_release_date(item)[:4]})") 
@@ -158,7 +159,6 @@ def random_recommendations():
     view_details(random.choice(results))    
 
 def view_details(item):
-    clear_screen()
     media = item.get("media_type") or ("movie" if item.get("title") else "tv")
     genres = MOVIE_GENRES if media == "movie" else TV_GENRES
     genre_text = format_genres(item.get("genre_ids", []), genres)
