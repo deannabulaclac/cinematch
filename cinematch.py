@@ -6,11 +6,12 @@ import random
 import pyfiglet
 from dotenv import load_dotenv
 
+# Load TMDB API key from .env file instead of storing it in the source code
 load_dotenv()
 
 BASE_URL = "https://api.themoviedb.org/3"
 IMAGE_URL = "https://image.tmdb.org/t/p/w500"
-API_KEY = os.getenv("TMDB_API_KEY") # 9ceb3cd3d418d2ce001136f4ac0f4eed
+API_KEY = os.getenv("TMDB_API_KEY") 
 if not API_KEY:
     sys.exit("Missing TMDB API key. Please add it to your .env file.")
 LANGUAGES = {"en": "English", "ko": "Korean", "ja": "Japanese", "fr": "French", "es": "Spanish", "zh": "Chinese", "th": "Thai"}
@@ -20,6 +21,7 @@ def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
 def get_json(url, params):
+    # Fetch data from TMDB API and handle connection errors
     try:
         response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
@@ -33,10 +35,12 @@ def choose_media():
     return media
 
 def show_header():
+    # Display the CineMatch title banner in the terminal
     header = pyfiglet.figlet_format("CineMatch", font="doom")
     print(header)
 
 def load_genres():
+    # Load movie and TV genres once at startup to avoid repeated API requests
     def fetch(endpoint):
         data = get_json(f"{BASE_URL}/{endpoint}", {"api_key": API_KEY}) or {}
         return {g["id"]: g["name"] for g in data.get("genres", [])}
@@ -46,9 +50,11 @@ def format_genres(genre_ids, genres_dict):
     return ", ".join(genres_dict.get(g) for g in genre_ids if genres_dict.get(g)) or "N/A"
 
 def get_title(item):
+    # TMDB uses "title" for movies and "name" for TV shows
     return item.get("title") or item.get("name") or "Unknown"
 
 def get_release_date(item):
+    # TMDB uses different release date fields for movies and TV shows
     return (item.get("release_date") or item.get("first_air_date") or "N/A")
 
 def search_title(): 
@@ -79,6 +85,7 @@ def search_title():
         print(f"Please enter 0-{len(results)} only.")
     
 def similar_titles():
+    # Retrieve recommendations based on the user's selected movie or TV show
     selected = search_title()
     if not selected: return
     media = selected["media_type"]
@@ -133,7 +140,7 @@ def view_trending():
 def random_recommendations():
     print("\n========== SURPRISE ME! ==========")
     media = choose_media()
-
+    # Filter recommendations to prioritize highly rated and well-reviewed titles
     data = get_json(f"{BASE_URL}/discover/{media}",
     {
         "api_key": API_KEY,
