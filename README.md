@@ -114,7 +114,7 @@ python cinematch.py
 ```
 cinematch/
 │
-├── cinematch.py          # Main application
+├── cinematch.py        # Main application
 ├── requirements.txt    # Python dependencies
 ├── .env.example        # Environment variable template
 ├── .gitignore          # Ignored files
