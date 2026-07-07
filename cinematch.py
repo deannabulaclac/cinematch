@@ -197,7 +197,7 @@ def main():
         print("\n========== MAIN MENU ==========")
         print("1. Find Similar Movies/TV Shows")
         print("2. Trending Today")
-        print("3. Random Recommendations")
+        print("3. Surprise Me")
         print("4. Exit")
         choice = input("Choose an option: ")
 
