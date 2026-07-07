@@ -147,7 +147,7 @@ This allows the application to handle both media types consistently.
 
 ## Design Decisions
 
-### Modular Function Design
+### 1. Modular Function Design
 
 The application is separated into multiple functions, each responsible for a specific task:
 
@@ -159,13 +159,13 @@ The application is separated into multiple functions, each responsible for a spe
 
 This makes the code easier to understand, maintain, and expand.
 
-### Secure API Key Management
+### 2. Secure API Key Management
 
 Instead of storing the API key directly in the source code, CineMatch uses environment variables through `.env`.
 
 This prevents sensitive credentials from being accidentally exposed when sharing the project publicly.
 
-### Quality-Based Recommendations
+### 3. Quality-Based Recommendations
 
 The random recommendation feature uses TMDB filters such as rating and vote count to avoid suggesting low-quality titles.
 
