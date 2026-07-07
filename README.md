@@ -81,8 +81,8 @@ Users can also open the poster image directly in their browser.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/CineMatch.git
-cd CineMatch
+git clone https://github.com/yourusername/cinematch.git
+cd cinematch
 ```
 
 ### 2. Install dependencies
@@ -112,7 +112,7 @@ python project.py
 ## Project Structure
 
 ```
-CineMatch/
+cinematch/
 │
 ├── project.py          # Main application
 ├── requirements.txt    # Python dependencies
