@@ -76,6 +76,7 @@ You can get your API key from [The Movie Database (TMDB)](https://www.themoviedb
 ```bash
 python cinematch.py
 ```
+---
 
 ## What I Learned
 
