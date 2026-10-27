@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <title>Surprise Me — CineMatch</title>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="/">
+            <span class="brand-mark">C</span>
+            <span>CineMatch</span>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <a href="/similar">Find Similar</a>
+            <a href="/trending">Trending Today</a>
+            <a href="/surprise">Surprise Me</a>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <h1>Surprise Me</h1>
+        <p class="tagline">Get a random recommendation filtered by rating and vote count.</p>
+
+        <form action="/surprise" method="post" class="feature-form">
+            <label for="surprise-type">Choose a type:</label>
+            <select id="surprise-type" name="content_type">
+                <option value="movie">Movies</option>
+                <option value="tv">TV shows</option>
+            </select>
+
+            <label for="min-rating">Minimum rating:</label>
+            <input id="min-rating" type="number" name="min_rating"
+                   min="0" max="10" step="0.1" value="7">
+
+            <label for="min-votes">Minimum votes:</label>
+            <input id="min-votes" type="number" name="min_votes"
+                   min="0" value="100">
+
+            <button type="submit">Surprise Me</button>
+        </form>
+
+        {% if surprise_items %}
+            <h3>How about these?</h3>
+            <div class="poster-grid">
+                {% for item in surprise_items %}
+                    <article class="poster-card">
+                        {% if item.poster_url %}
+                            <img src="{{ item.poster_url }}"
+                                 alt="Poster for {{ item.title or item.name }}">
+                        {% else %}
+                            <div class="poster-placeholder">No poster</div>
+                        {% endif %}
+                        <p>{{ item.title or item.name }}</p>
+                        <details>
+                            <summary>View details</summary>
+                            <p>{{ item.overview or "No description available." }}</p>
+                        </details>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>
