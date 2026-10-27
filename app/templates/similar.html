@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <title>Find Similar — CineMatch</title>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="/">
+            <span class="brand-mark">C</span>
+            <span>CineMatch</span>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <a href="/similar">Find Similar</a>
+            <a href="/trending">Trending Today</a>
+            <a href="/surprise">Surprise Me</a>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <h1>Find Similar Movies &amp; TV Shows</h1>
+        <p class="tagline">Search a title and get similar recommendations.</p>
+
+        <form action="/similar" method="post" class="feature-form">
+            <input type="hidden" name="action" value="search">
+
+            <label for="content-type">Choose a type:</label>
+            <select id="content-type" name="content_type">
+                <option value="movie"
+                    {% if content_type|default('movie') == 'movie' %}selected{% endif %}>
+                    Movies
+                </option>
+                <option value="tv"
+                    {% if content_type|default('movie') == 'tv' %}selected{% endif %}>
+                    TV shows
+                </option>
+            </select>
+
+            <label for="movie-title">Search for a title:</label>
+            <input id="movie-title" type="text" name="movie_title"
+                   value="{{ movie_title|default('') }}"
+                   placeholder="Enter a movie or TV show" required>
+
+            <button type="submit">Search</button>
+        </form>
+
+        {% if search_results %}
+            <h3>Select a title</h3>
+            <form action="/similar" method="post" class="feature-form">
+                <input type="hidden" name="action" value="similar">
+                <input type="hidden" name="content_type"
+                       value="{{ content_type|default('movie') }}">
+
+                <div class="title-results">
+                    {% for item in search_results %}
+                        <label class="title-option">
+                            <input type="radio" name="selected_id"
+                                   value="{{ item.id }}" required>
+                            <span>{{ item.title or item.name }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+
+                <button type="submit">Show Similar Titles</button>
+            </form>
+        {% endif %}
+
+        {% if recommendations %}
+            <h3>Top recommended movies:</h3>
+            <div class="poster-grid">
+                {% for item in recommendations %}
+                    <article class="poster-card">
+                        {% if item.poster_url %}
+                            <img src="{{ item.poster_url }}"
+                                 alt="Poster for {{ item.title or item.name }}">
+                        {% else %}
+                            <div class="poster-placeholder">No poster</div>
+                        {% endif %}
+                        <p>{{ item.title or item.name }}</p>
+                        <details>
+                            <summary>View details</summary>
+                            <p>{{ item.overview or "No description available." }}</p>
+                        </details>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>
