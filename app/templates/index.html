@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header>
+        <a href="/" aria-label="CineMatch home">CineMatch</a>
+
+        <nav aria-label="Main navigation">
+            <a href="#find-similar">Find Similar</a>
+            <a href="#trending">Trending Today</a>
+            <a href="#surprise-me">Surprise Me</a>
+        </nav>
+    </header>
+
+    <main>
+        <section aria-labelledby="page-title">
+            <h1 id="page-title">Find your next favorite</h1>
+            <p>Discover movies and TV shows you might enjoy.</p>
+        </section>
+
+        <section id="find-similar" aria-labelledby="find-title">
+            <h2 id="find-title">Find Similar Movies &amp; TV Shows</h2>
+            <p>Choose a title to get similar recommendations.</p>
+
+            <form action="/" method="post">
+                <label for="content-type">Search for:</label>
+                <select id="content-type" name="content_type">
+                    <option value="movie"
+                        {% if content_type|default('movie') == 'movie' %}selected{% endif %}>
+                        Movies
+                    </option>
+                    <option value="tv"
+                        {% if content_type|default('movie') == 'tv' %}selected{% endif %}>
+                        TV shows
+                    </option>
+                </select>
+
+                <label for="movie-title">Title:</label>
+                <input
+                    type="text"
+                    id="movie-title"
+                    name="movie_title"
+                    placeholder="Try a title you like"
+                    value="{{ movie_title|default('') }}"
+                    required
+                >
+
+                <button type="submit">Search</button>
+            </form>
+
+            <div id="search-results" aria-live="polite">
+                <h3>Search results</h3>
+
+                {% if movie_title %}
+                    <!-- Movie result HTML -->
+                {% else %}
+                    <!-- Default content -->
+                {% endif %}
+
