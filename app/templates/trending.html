@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <title>Trending Today — CineMatch</title>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="/">
+            <span class="brand-mark">C</span>
+            <span>CineMatch</span>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <a href="/similar">Find Similar</a>
+            <a href="/trending">Trending Today</a>
+            <a href="/surprise">Surprise Me</a>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <h1>Trending Today</h1>
+        <p class="tagline">See popular movies or TV shows trending today.</p>
+
+        <form action="/trending" method="post" class="feature-form">
+            <label for="trending-type">Show:</label>
+            <select id="trending-type" name="content_type">
+                <option value="movie">Movies</option>
+                <option value="tv">TV shows</option>
+            </select>
+
+            <button type="submit">Show Trending</button>
+        </form>
+
+        {% if trending_items %}
+            <h3>Trending now</h3>
+            <div class="poster-grid">
+                {% for item in trending_items %}
+                    <article class="poster-card">
+                        {% if item.poster_url %}
+                            <img src="{{ item.poster_url }}"
+                                 alt="Poster for {{ item.title or item.name }}">
+                        {% else %}
+                            <div class="poster-placeholder">No poster</div>
+                        {% endif %}
+                        <p>{{ item.title or item.name }}</p>
+                        <details>
+                            <summary>View details</summary>
+                            <p>{{ item.overview or "No description available." }}</p>
+                        </details>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>
