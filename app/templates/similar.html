@@ -21,7 +21,7 @@
     </header>
 
     <main class="page-content">
-        <h1>Find Similar Movies &amp; TV Shows</h1>
+        <h1 style="font-size: 40px">Find Similar Movies &amp; TV Shows</h1>
         <p class="tagline">Search a title and get similar recommendations.</p>
 
         <form action="/similar" method="post" class="feature-form">
@@ -39,10 +39,14 @@
                 </option>
             </select>
 
-            <label for="movie-title">Search for a title:</label>
-            <input id="movie-title" type="text" name="movie_title"
-                   value="{{ movie_title|default('') }}"
-                   placeholder="Enter a movie or TV show" required>
+            <div class="search-box">
+                <label for="movie-title">Search for a title:</label>
+                <input id="movie-title" type="text" name="movie_title"
+                       value="{{ movie_title|default('') }}"
+                       placeholder="Enter a movie or TV show" required
+                       autocomplete="off">
+                <div id="search-suggestions" class="search-suggestions"></div>
+            </div>
 
             <button type="submit">Search</button>
         </form>
@@ -50,26 +54,38 @@
         {% if search_results %}
             <h3>Select a title</h3>
             <form action="/similar" method="post" class="feature-form">
-                <input type="hidden" name="action" value="similar">
+                <input type="hidden" name="action" value="recommend">
                 <input type="hidden" name="content_type"
                        value="{{ content_type|default('movie') }}">
+                <input type="hidden" name="movie_title"
+                        value="{{ movie_title|default('') }}">
 
                 <div class="title-results">
                     {% for item in search_results %}
-                        <label class="title-option">
-                            <input type="radio" name="selected_id"
-                                   value="{{ item.id }}" required>
-                            <span>{{ item.title or item.name }}</span>
-                        </label>
+                        {% if item.poster_url %}
+                            <label class="title-card">
+                                <input type="radio" name="selected_id"
+                                    value="{{ item.id }}" required>
+                                <img class="title-card-poster"
+                                    src="{{ item.poster_url }}"
+                                    alt="Poster for {{ item.title or item.name }}">
+                                <span class="title-card-name">
+                                    {{ item.title or item.name }}
+                                </span>
+                            </label>
+                        {% endif %}
                     {% endfor %}
                 </div>
+                <button type="submit" name="action" value="recommend">Show Similar Titles</button>
 
-                <button type="submit">Show Similar Titles</button>
             </form>
         {% endif %}
 
         {% if recommendations %}
-            <h3>Top recommended movies:</h3>
+            <h3>
+                Top recommended
+                {% if content_type == "tv" %}TV shows{% else %}movies{% endif %}:
+            </h3>
             <div class="poster-grid">
                 {% for item in recommendations %}
                     <article class="poster-card">
@@ -89,5 +105,50 @@
             </div>
         {% endif %}
     </main>
+
+    <script>
+        const input = document.querySelector("#movie-title");
+        const suggestions = document.querySelector("#search-suggestions");
+        let timer;
+
+        input.addEventListener("input", () => {
+            clearTimeout(timer);
+            const query = input.value.trim();
+            suggestions.replaceChildren();
+
+            if (query.length < 2) return;
+
+            timer = setTimeout(async () => {
+                try {
+                    const response = await fetch(
+                        `/api/suggest-titles?q=${encodeURIComponent(query)}` +
+                        `&content_type=${encodeURIComponent(document.querySelector("#content-type").value)}`
+                    );
+
+                    if (!response.ok) throw new Error("Suggest request failed");
+                    const titles = await response.json();
+
+                    titles.forEach(item => {
+                        const button = document.createElement("button");
+                        button.type = "button";
+                        button.textContent = item.title;
+                        button.addEventListener("click", () => {
+                            input.value = item.title;
+                            suggestions.replaceChildren();
+                        });
+                        suggestions.appendChild(button);
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
+            }, 300)
+        });
+
+        document.addEventListener("click", event => {
+            if (!event.target.closest(".search-box")) {
+                suggestions.replaceChildren();
+            }
+        });
+    </script>
 </body>
 </html>
