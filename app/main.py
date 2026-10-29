@@ -8,6 +8,8 @@ from fastapi import FastAPI, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+from fastapi.responses import JSONResponse
+
 
 # Load the TMDB API key from the .env file (not hard-coded).
 load_dotenv()
@@ -226,6 +228,17 @@ def surprise_action(
             "surprise_items": get_surprise(content_type, min_rating, min_votes),
         },
     )
+
+@app.get("/api/suggest-titles")
+async def suggest_titles(q: str = "", content_type: str = "movie"):
+    if len(q) < 2:
+        return JSONResponse([])
+    results = search_titles(q, content_type)  # ipasa ang content_type
+    titles = [
+        {"title": item["title"]}  # 'title' palagi dahil sa to_card
+        for item in results[:8]
+    ]
+    return JSONResponse(titles)
 
 # Load genres once when the app starts.
 load_genres()
